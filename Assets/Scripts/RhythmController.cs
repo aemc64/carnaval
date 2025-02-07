@@ -5,6 +5,7 @@ public class RhythmController : MonoBehaviour
 {
     [SerializeField] private float _beatTime;
 
+    public event Action OnActivate;
     public event Action OnBeat;
 
     private float _timer;
@@ -34,6 +35,7 @@ public class RhythmController : MonoBehaviour
 
     public void Activate()
     {
+        OnActivate?.Invoke();
         ResetBeat();
     }
 
