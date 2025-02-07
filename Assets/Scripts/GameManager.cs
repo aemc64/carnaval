@@ -31,11 +31,11 @@ public class GameManager : MonoBehaviour
 
     private void OnBeatResult(bool onBeat)
     {
-        _player.UpdateIntendedAction();
+        _player.UpdateIntendedAction(onBeat);
 
         foreach (var enemy in _enemyControllers)
         {
-            enemy.UpdateIntendedAction();
+            enemy.UpdateIntendedAction(onBeat);
         }
         
         _player.DoAction(onBeat);

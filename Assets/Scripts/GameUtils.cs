@@ -12,9 +12,9 @@ public enum Direction
 
 public static class GameUtils
 {
-    private const float TileSize = 1f;
+    public const float TileSize = 1f;
 
-    private static readonly Dictionary<Direction, Vector3> Directions = new Dictionary<Direction, Vector3>()
+    public static readonly Dictionary<Direction, Vector3> Directions = new Dictionary<Direction, Vector3>()
     {
         { Direction.Left, Vector3.left },
         { Direction.Right, Vector3.right },

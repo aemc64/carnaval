@@ -1,46 +1,67 @@
 using UnityEngine;
 
-public class Player : MonoBehaviour
+public class Player : MonoBehaviour, IMovement
 {
-    private Rigidbody2D rigidbody2;
-    public float stepSize = 1f; // Tamaño del salto
+    // Tamaño del salto
     public LayerMask wallLayer; // Capa para detectar los muros
-
-    void Start()
+    
+    private RhythmController _rhythmController;
+    private Direction _direction;
+    
+    private void Start()
     {
-        rigidbody2 = GetComponent<Rigidbody2D>();
+        _rhythmController = GameManager.Instance.RhythmController;
     }
 
-    void Update()
+    private void Update()
     {
-        Vector2 moveDirection = Vector2.zero;
-
+        var direction = Direction.None;
+        var updateInputTime = false;
+        
         // Detectar teclas de movimiento
-        if (Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.UpArrow))  // Tecla W o Flecha arriba
-            moveDirection = Vector2.up;
+        if (Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.UpArrow)) // Tecla W o Flecha arriba
+        {
+            direction = Direction.Up;
+            updateInputTime = true;
+        }
         else if (Input.GetKeyDown(KeyCode.S) || Input.GetKeyDown(KeyCode.DownArrow)) // Tecla S o Flecha abajo
-            moveDirection = Vector2.down;
+        {
+            direction = Direction.Down;
+            updateInputTime = true;
+        }
         else if (Input.GetKeyDown(KeyCode.A) || Input.GetKeyDown(KeyCode.LeftArrow)) // Tecla A o Flecha izquierda
-            moveDirection = Vector2.left;
+        {
+            direction = Direction.Left;
+            updateInputTime = true;
+        }
         else if (Input.GetKeyDown(KeyCode.D) || Input.GetKeyDown(KeyCode.RightArrow)) // Tecla D o Flecha derecha
-            moveDirection = Vector2.right;
+        {
+            direction = Direction.Right;
+            updateInputTime = true;
+        }
+
+        if (updateInputTime)
+        {
+            _rhythmController.UpdateLastInputTime();
+        }
        
         // Mover el jugador
-        if (moveDirection != Vector2.zero)
+        if (direction != Direction.None && !IsWall(direction))
         {
-            // Solo mover si no hay muro adelante
-            if (!IsWall(moveDirection))
-            {
-                Vector2 targetPosition = transform.position + (Vector3)moveDirection * stepSize;
-                transform.position = targetPosition;
-            }
+            _direction = direction;
         }
     }
-
+    
     // Usa un Raycast para detectar muros antes de moverse
-    private bool IsWall(Vector2 moveDirection)
+    private bool IsWall(Direction direction)
     {
-        RaycastHit2D hit = Physics2D.Raycast(transform.position, moveDirection, stepSize, wallLayer);
+        var moveDirection = GameUtils.Directions[direction];
+        var hit = Physics2D.Raycast(transform.position, moveDirection, GameUtils.TileSize, wallLayer);
         return hit.collider != null; // Si el Raycast detecta un muro, bloquea el movimiento
+    }
+    
+    public Direction GetDirection()
+    {
+        return _direction;
     }
 }
