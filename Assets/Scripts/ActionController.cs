@@ -145,7 +145,6 @@ public class ActionController : MonoBehaviour
         }
         
         _animator.SetTrigger("Attack");
-        
     }
 
     private void Move()
