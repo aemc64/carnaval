@@ -17,6 +17,7 @@ public class ActionController : MonoBehaviour
     private Health _health;
     private IMovement _movement;
     private Animator _animator;
+    private SpriteRenderer _spriteRenderer;
     
     private ActionType _currentAction;
     private ActionController _attackTarget;
@@ -29,6 +30,7 @@ public class ActionController : MonoBehaviour
         _health = GetComponent<Health>();
         _movement = GetComponent<IMovement>();
         _animator = GetComponent<Animator>();
+        _spriteRenderer = GetComponent<SpriteRenderer>();
         
         ActualPosition = transform.position;
     }
@@ -69,6 +71,8 @@ public class ActionController : MonoBehaviour
 
         if (CanMove(onBeat))
         {
+            ChangeSpriteDirection();
+            
             if (CanAttack())
             {
                 SetAction(ActionType.Attack);
@@ -116,12 +120,32 @@ public class ActionController : MonoBehaviour
         return CurrentDirection != Direction.None;
     }
 
+    private void ChangeSpriteDirection()
+    {
+        _spriteRenderer.flipX = CurrentDirection switch
+        {
+            Direction.Left => true,
+            Direction.Right => false,
+            _ => _spriteRenderer.flipX
+        };
+    }
+
     private void Attack()
     {
-        //Debug.Log($"{ gameObject.name }: Attacking { _attackTarget.gameObject.name }");
-        
         _attackTarget._health.TakeDamage();
+
+        var isTargetDead = _attackTarget._health.CurrentHealth == 0;
+        _attackTarget._animator.SetTrigger(isTargetDead ? "Dead" : "Hurt");
         _attackTarget.SetAction(ActionType.Attacked);
+
+        if (isTargetDead)
+        {
+            _attackTarget.enabled = false;
+            _attackTarget.gameObject.layer = LayerMask.NameToLayer("Wall");
+        }
+        
+        _animator.SetTrigger("Attack");
+        
     }
 
     private void Move()
@@ -129,9 +153,7 @@ public class ActionController : MonoBehaviour
         var movementDirection = GameUtils.Directions[CurrentDirection];
         var targetPosition = ActualPosition + movementDirection * GameUtils.TileSize;
         ActualPosition = targetPosition;
-        
-        //Debug.Log($"{ gameObject.name }: Move to { ActualPosition }");
-        
+
         transform.DOMove(ActualPosition, MovementDuration).SetEase(Ease.Linear);
         _animator.SetTrigger("Move");
     }

@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public class GameManager : MonoBehaviour
@@ -8,7 +9,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] private ActionController _player;
     [SerializeField] private Transform _enemiesParent;
 
-    private ActionController[] _enemyControllers;
+    private List<ActionController> _enemyControllers;
     
     public RhythmController RhythmController => _rhythmController;
     public ActionController Player => _player;
@@ -26,7 +27,7 @@ public class GameManager : MonoBehaviour
         
         _rhythmController.OnBeatResult += OnBeatResult;
         
-        _enemyControllers = _enemiesParent.GetComponentsInChildren<ActionController>();
+        _enemyControllers = new List<ActionController>(_enemiesParent.GetComponentsInChildren<ActionController>());
     }
 
     private void OnBeatResult(bool onBeat)
@@ -43,6 +44,14 @@ public class GameManager : MonoBehaviour
         foreach (var enemy in _enemyControllers)
         {
             enemy.DoAction(onBeat);
+        }
+
+        for (var i = _enemyControllers.Count - 1; i >= 0; i--)
+        {
+            if (!_enemyControllers[i].enabled)
+            {
+                _enemyControllers.RemoveAt(i);
+            }
         }
     }
 
