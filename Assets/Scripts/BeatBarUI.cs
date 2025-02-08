@@ -1,9 +1,11 @@
+using DG.Tweening;
 using TMPro;
 using UnityEngine;
 
 public class BeatBarUI : MonoBehaviour
 {
-    [SerializeField] private TextMeshProUGUI _result;
+    [SerializeField] private TextMeshProUGUI _resultPrefab;
+    [SerializeField] private Vector2 _offset;
 
     private RhythmController _rhythmController;
     
@@ -15,7 +17,12 @@ public class BeatBarUI : MonoBehaviour
     
     private void OnBeatResult(bool success)
     {
-        _result.text = success ? "Good" : "Bad";
+        var textInstance = Instantiate(_resultPrefab, transform);
+        textInstance.text = success ? "Good!" : "Miss";
+        var rectTransform = (RectTransform)textInstance.transform;
+        rectTransform
+            .DOAnchorPos(rectTransform.anchoredPosition + _offset, GameManager.Instance.RhythmController.BeatTime)
+            .OnComplete(() => { Destroy(textInstance.gameObject); });
     }
 
     private void OnDestroy()
