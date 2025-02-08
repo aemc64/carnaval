@@ -31,6 +31,11 @@ public static class GameUtils
 
     public static Direction GetDirectionTo(this Vector3 position, Vector3 target)
     {
+        if (position.IsAt(target))
+        {
+            return Direction.None;
+        }
+        
         var diffX = target.x - position.x;
         var diffY = target.y - position.y;
 
