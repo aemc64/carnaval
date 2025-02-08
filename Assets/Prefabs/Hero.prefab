@@ -70,6 +70,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 706212337461394028, guid: 8622d199c7ea6114aa3d7dd2aa8c928f, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: -5245602006594329872, guid: 17483ee7ae1120842b371f53bd1e039b, type: 3}
     - target: {fileID: 742149272784957712, guid: 8622d199c7ea6114aa3d7dd2aa8c928f, type: 3}
       propertyPath: m_Name
       value: Hero
@@ -126,6 +130,10 @@ PrefabInstance:
       propertyPath: _beatsToMove
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 7396486792347320149, guid: 8622d199c7ea6114aa3d7dd2aa8c928f, type: 3}
+      propertyPath: m_Controller
+      value: 
+      objectReference: {fileID: 22100000, guid: 72959d919abdcb74d81baf7a9981ec1b, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects:

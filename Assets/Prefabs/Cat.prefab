@@ -70,6 +70,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 706212337461394028, guid: 8622d199c7ea6114aa3d7dd2aa8c928f, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: -2255785322637601436, guid: 6477a59e511d2c54bb7c1c5efa89ec60, type: 3}
     - target: {fileID: 742149272784957712, guid: 8622d199c7ea6114aa3d7dd2aa8c928f, type: 3}
       propertyPath: m_Name
       value: Cat
@@ -190,6 +194,10 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7396486792347320149, guid: 8622d199c7ea6114aa3d7dd2aa8c928f, type: 3}
+      propertyPath: m_Controller
+      value: 
+      objectReference: {fileID: 22100000, guid: 36dbaf0d44dfd8b4aba995fe0c709038, type: 2}
     m_RemovedComponents:
     - {fileID: 6904472071781726373, guid: 8622d199c7ea6114aa3d7dd2aa8c928f, type: 3}
     m_RemovedGameObjects: []

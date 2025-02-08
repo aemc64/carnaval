@@ -29,8 +29,8 @@ public class ActionController : MonoBehaviour
     {
         _health = GetComponent<Health>();
         _movement = GetComponent<IMovement>();
-        _animator = GetComponent<Animator>();
-        _spriteRenderer = GetComponent<SpriteRenderer>();
+        _animator = GetComponentInChildren<Animator>();
+        _spriteRenderer = GetComponentInChildren<SpriteRenderer>();
         
         ActualPosition = transform.position;
     }
