@@ -13,6 +13,8 @@ public class RhythmController : MonoBehaviour
 {
     [SerializeField] private float _beatTime;
     [SerializeField] private float _tolerance = 0.25f;
+    [SerializeField] private AudioSource _audioSource;
+    [SerializeField] private GameObject _beatBar;
     
     public float BeatTime => _beatTime;
 
@@ -67,6 +69,9 @@ public class RhythmController : MonoBehaviour
 
     private void Activate()
     {
+        _beatBar.SetActive(true);
+        _audioSource.Play();
+        
         OnActivate?.Invoke();
         _isActive = true;
         ResetBeat();
