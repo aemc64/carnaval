@@ -60,4 +60,9 @@ public class RhythmController : MonoBehaviour
     {
         _lastInputTime = Time.time;
     }
+
+    public void Deactivate()
+    {
+        _isActive = false;
+    }
 }

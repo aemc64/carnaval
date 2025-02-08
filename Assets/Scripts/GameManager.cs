@@ -48,6 +48,12 @@ public class GameManager : MonoBehaviour
             enemy.DoAction();
         }
 
+        if (!_player.enabled)
+        {
+            GameOver(false);
+            return;
+        }
+
         for (var i = _enemyControllers.Count - 1; i >= 0; i--)
         {
             if (!_enemyControllers[i].enabled)
@@ -58,6 +64,16 @@ public class GameManager : MonoBehaviour
                 OnEnemyDefeated?.Invoke();
             }
         }
+
+        if (DefeatedEnemies == MaxEnemies)
+        {
+            GameOver(true);
+        }
+    }
+
+    private void GameOver(bool playerWon)
+    {
+        _rhythmController.Deactivate();
     }
 
     private void OnDestroy()
