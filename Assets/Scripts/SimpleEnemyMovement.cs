@@ -5,12 +5,14 @@ public class SimpleEnemyMovement : MonoBehaviour, IMovement
 {
     [SerializeField] private int _beatsToMove = 3;
     [SerializeField] private Transform _targetsContainer;
+    [SerializeField] private bool _loop = true;
 
     private ActionController _actionController;
     
     private RhythmController _rhythmController;
     private int _currentBeats;
     private int _currentWaypointIndex = 1;
+    private bool _reversed;
 
     private readonly List<Vector3> _waypoints = new List<Vector3>();
 
@@ -43,11 +45,35 @@ public class SimpleEnemyMovement : MonoBehaviour, IMovement
         {
             return;
         }
-        
-        _currentWaypointIndex++;
-        if (_currentWaypointIndex == _waypoints.Count)
+
+        if (_loop)
         {
-            _currentWaypointIndex = 0;
+            _currentWaypointIndex++;
+            if (_currentWaypointIndex == _waypoints.Count)
+            {
+                _currentWaypointIndex = 0;
+            }
+        }
+        else
+        {
+            if (!_reversed)
+            {
+                _currentWaypointIndex++;
+                if (_currentWaypointIndex == _waypoints.Count)
+                {
+                    _reversed = true;
+                    _currentWaypointIndex = _waypoints.Count - 2;
+                }
+            }
+            else
+            {
+                _currentWaypointIndex--;
+                if (_currentWaypointIndex == -1)
+                {
+                    _reversed = false;
+                    _currentWaypointIndex = 1;
+                }
+            }
         }
     }
 
