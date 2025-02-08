@@ -15,7 +15,7 @@ public class PlayerActionController : ActionController
     {
         var movementDirection = GameUtils.Directions[CurrentDirection];
         
-        var hit = Physics2D.Raycast(transform.position, movementDirection, GameUtils.TileSize, _enemyLayer.value);
+        var hit = Physics2D.Raycast(ActualPosition, movementDirection, GameUtils.TileSize, _enemyLayer.value);
         if (hit.collider != null)
         {
             if (hit.collider.TryGetComponent(out ActionController enemyActionController))

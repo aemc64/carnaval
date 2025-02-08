@@ -6,6 +6,8 @@ public class SimpleEnemyMovement : MonoBehaviour, IMovement
     [SerializeField] private int _beatsToMove = 3;
     [SerializeField] private Transform _targetsContainer;
 
+    private ActionController _actionController;
+    
     private RhythmController _rhythmController;
     private int _currentBeats;
     private int _currentWaypointIndex = 1;
@@ -14,6 +16,8 @@ public class SimpleEnemyMovement : MonoBehaviour, IMovement
 
     private void Awake()
     {
+        _actionController = GetComponent<ActionController>();
+        
         _waypoints.Add(transform.position);
         
         foreach (Transform target in _targetsContainer)
@@ -35,7 +39,7 @@ public class SimpleEnemyMovement : MonoBehaviour, IMovement
             return;
         }
 
-        if (!transform.position.IsAt(_waypoints[_currentWaypointIndex]))
+        if (!_actionController.ActualPosition.IsAt(_waypoints[_currentWaypointIndex]))
         {
             return;
         }
@@ -59,7 +63,7 @@ public class SimpleEnemyMovement : MonoBehaviour, IMovement
         _currentBeats = 0;
             
         var destination = _waypoints[_currentWaypointIndex];
-        var direction = transform.position.GetDirectionTo(destination);
+        var direction = _actionController.ActualPosition.GetDirectionTo(destination);
         return direction;
     }
 

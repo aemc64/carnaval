@@ -1,4 +1,5 @@
 using System;
+using DG.Tweening;
 using UnityEngine;
 
 public enum ActionType
@@ -11,6 +12,8 @@ public enum ActionType
 
 public class ActionController : MonoBehaviour
 {
+    private const float MovementDuration = 0.25f;
+    
     private Health _health;
     private IMovement _movement;
     
@@ -18,11 +21,14 @@ public class ActionController : MonoBehaviour
     private ActionController _attackTarget;
     
     protected Direction CurrentDirection { get; private set; }
+    public Vector3 ActualPosition { get; private set; }
     
     protected virtual void Awake()
     {
         _health = GetComponent<Health>();
         _movement = GetComponent<IMovement>();
+        
+        ActualPosition = transform.position;
     }
 
     public void DoAction(bool onBeat)
@@ -87,8 +93,8 @@ public class ActionController : MonoBehaviour
             return false;
         }
         
-        var targetPosition = _attackTarget.transform.position;
-        var isInNextTile = transform.position.IsTargetInNextTile(targetPosition, CurrentDirection);
+        var targetPosition = _attackTarget.ActualPosition;
+        var isInNextTile = ActualPosition.IsTargetInNextTile(targetPosition, CurrentDirection);
         return isInNextTile;
     }
 
@@ -110,7 +116,7 @@ public class ActionController : MonoBehaviour
 
     private void Attack()
     {
-        Debug.Log($"{ gameObject.name }: Attack");
+        //Debug.Log($"{ gameObject.name }: Attacking { _attackTarget.gameObject.name }");
         
         _attackTarget._health.TakeDamage();
         _attackTarget.SetAction(ActionType.Attacked);
@@ -118,9 +124,12 @@ public class ActionController : MonoBehaviour
 
     private void Move()
     {
-        Debug.Log($"{ gameObject.name }: Move");
-        
         var movementDirection = GameUtils.Directions[CurrentDirection];
-        transform.position += movementDirection * GameUtils.TileSize;
+        var targetPosition = ActualPosition + movementDirection * GameUtils.TileSize;
+        ActualPosition = targetPosition;
+        
+        //Debug.Log($"{ gameObject.name }: Move to { ActualPosition }");
+        
+        transform.DOMove(ActualPosition, MovementDuration).SetEase(Ease.Linear);
     }
 }

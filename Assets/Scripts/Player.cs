@@ -3,10 +3,14 @@ using UnityEngine;
 
 public class Player : MonoBehaviour, IMovement
 {
+    private ActionController _actionController;
+    
     private LayerMask _wallLayer; // Capa para detectar los muros
 
     private void Awake()
     {
+        _actionController = GetComponent<ActionController>();
+        
         _wallLayer = 1 << LayerMask.NameToLayer("Wall");
     }
 
@@ -67,7 +71,7 @@ public class Player : MonoBehaviour, IMovement
     private bool IsWall(Direction direction)
     {
         var moveDirection = GameUtils.Directions[direction];
-        var hit = Physics2D.Raycast(transform.position, moveDirection, GameUtils.TileSize, _wallLayer.value);
+        var hit = Physics2D.Raycast(_actionController.ActualPosition, moveDirection, GameUtils.TileSize, _wallLayer.value);
         return hit.collider != null; // Si el Raycast detecta un muro, bloquea el movimiento
     }
     
