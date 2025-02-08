@@ -15,9 +15,11 @@ public class ActionController : MonoBehaviour
     private IMovement _movement;
     
     private ActionType _currentAction;
-    private Direction _currentDirection;
+    private ActionController _attackTarget;
     
-    private void Awake()
+    protected Direction CurrentDirection { get; private set; }
+    
+    protected virtual void Awake()
     {
         _health = GetComponent<Health>();
         _movement = GetComponent<IMovement>();
@@ -59,7 +61,7 @@ public class ActionController : MonoBehaviour
 
         if (CanMove(onBeat))
         {
-            if (CanAttack(onBeat))
+            if (CanAttack())
             {
                 SetAction(ActionType.Attack);
                 return;
@@ -77,16 +79,16 @@ public class ActionController : MonoBehaviour
         return GameManager.Instance.Player;
     }
 
-    private bool CanAttack(bool onBeat)
+    private bool CanAttack()
     {
-        var target = GetTarget();
-        if (target == null)
+        _attackTarget = GetTarget();
+        if (_attackTarget == null)
         {
             return false;
         }
         
-        var targetPosition = target.transform.position;
-        var isInNextTile = transform.position.IsTargetInNextTile(targetPosition, _currentDirection);
+        var targetPosition = _attackTarget.transform.position;
+        var isInNextTile = transform.position.IsTargetInNextTile(targetPosition, CurrentDirection);
         return isInNextTile;
     }
 
@@ -94,32 +96,31 @@ public class ActionController : MonoBehaviour
     {
         if (_movement == null)
         {
-            _currentDirection = Direction.None;
+            CurrentDirection = Direction.Left;
             return;
         }
         
-        _currentDirection = _movement.GetDirection();
+        CurrentDirection = _movement.GetDirection();
     }
 
     protected virtual bool CanMove(bool onBeat)
     {
-        return _currentDirection != Direction.None;
+        return CurrentDirection != Direction.None;
     }
 
     private void Attack()
     {
         Debug.Log($"{ gameObject.name }: Attack");
         
-        var target = GetTarget();
-        target._health.TakeDamage();
-        target.SetAction(ActionType.Attacked);
+        _attackTarget._health.TakeDamage();
+        _attackTarget.SetAction(ActionType.Attacked);
     }
 
     private void Move()
     {
         Debug.Log($"{ gameObject.name }: Move");
         
-        var movementDirection = GameUtils.Directions[_currentDirection];
+        var movementDirection = GameUtils.Directions[CurrentDirection];
         transform.position += movementDirection * GameUtils.TileSize;
     }
 }

@@ -26,8 +26,26 @@ public static class GameUtils
     {
         var directionVector = Directions[direction];
         var tilePosition = position + directionVector * TileSize;
-        var distance = Vector2.Distance(tilePosition, target);
-        var isInNextTile = Mathf.Approximately(distance, 0f);
-        return isInNextTile;
+        return IsAt(tilePosition, target);
+    }
+
+    public static Direction GetDirectionTo(this Vector3 position, Vector3 target)
+    {
+        var diffX = target.x - position.x;
+        var diffY = target.y - position.y;
+
+        if (Mathf.Abs(diffX) >= Mathf.Abs(diffY))
+        {
+            return diffX > 0f ? Direction.Right : Direction.Left;
+        }
+        
+        return diffY > 0f ? Direction.Up : Direction.Down;
+    }
+
+    public static bool IsAt(this Vector3 position, Vector3 target)
+    {
+        var distance = Vector2.Distance(position, target);
+        var isInPosition = Mathf.Approximately(distance, 0f);
+        return isInPosition;
     }
 }
