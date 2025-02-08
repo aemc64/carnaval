@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -13,6 +14,10 @@ public class GameManager : MonoBehaviour
     
     public RhythmController RhythmController => _rhythmController;
     public ActionController Player => _player;
+
+    public event Action OnEnemyDefeated;
+    
+    public int DefeatedEnemies { get; private set; }
 
     private void Awake()
     {
@@ -51,6 +56,9 @@ public class GameManager : MonoBehaviour
             if (!_enemyControllers[i].enabled)
             {
                 _enemyControllers.RemoveAt(i);
+                DefeatedEnemies++;
+                
+                OnEnemyDefeated?.Invoke();
             }
         }
     }
