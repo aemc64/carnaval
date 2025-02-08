@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 6904472071781726373}
   - component: {fileID: 649027695551506177}
   - component: {fileID: 492883723685495790}
+  - component: {fileID: 3632121394843913197}
   m_Layer: 7
   m_Name: Princess
   m_TagString: Untagged
@@ -124,6 +125,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _health: 3
+--- !u!114 &3632121394843913197
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 742149272784957712}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f6b2249ab5889b745aa59cac55a19909, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _prefab: {fileID: 1952068576883961278, guid: 522d704f658c90f4f84daa87814ec628, type: 3}
 --- !u!1 &1612012254477130888
 GameObject:
   m_ObjectHideFlags: 0

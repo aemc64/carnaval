@@ -18,6 +18,7 @@ public class GameManager : MonoBehaviour
     public event Action OnEnemyDefeated;
     
     public int DefeatedEnemies { get; private set; }
+    public int MaxEnemies { get; private set; }
 
     private void Awake()
     {
@@ -33,6 +34,7 @@ public class GameManager : MonoBehaviour
         _rhythmController.OnBeatResult += OnBeatResult;
         
         _enemyControllers = new List<ActionController>(_enemiesParent.GetComponentsInChildren<ActionController>());
+        MaxEnemies = _enemyControllers.Count;
     }
 
     private void OnBeatResult(bool onBeat)
