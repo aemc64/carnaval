@@ -16,6 +16,7 @@ public class ActionController : MonoBehaviour
     
     private Health _health;
     private IMovement _movement;
+    private Animator _animator;
     
     private ActionType _currentAction;
     private ActionController _attackTarget;
@@ -27,6 +28,7 @@ public class ActionController : MonoBehaviour
     {
         _health = GetComponent<Health>();
         _movement = GetComponent<IMovement>();
+        _animator = GetComponent<Animator>();
         
         ActualPosition = transform.position;
     }
@@ -131,5 +133,6 @@ public class ActionController : MonoBehaviour
         //Debug.Log($"{ gameObject.name }: Move to { ActualPosition }");
         
         transform.DOMove(ActualPosition, MovementDuration).SetEase(Ease.Linear);
+        _animator.SetTrigger("Move");
     }
 }
