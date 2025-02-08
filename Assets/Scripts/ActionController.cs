@@ -21,6 +21,7 @@ public class ActionController : MonoBehaviour
     
     private ActionType _currentAction;
     private ActionController _attackTarget;
+    private RhythmController _rhythmController;
     
     protected Direction CurrentDirection { get; private set; }
     public Vector3 ActualPosition { get; private set; }
@@ -33,6 +34,17 @@ public class ActionController : MonoBehaviour
         _spriteRenderer = GetComponentInChildren<SpriteRenderer>();
         
         ActualPosition = transform.position;
+    }
+
+    private void Start()
+    {
+        _rhythmController = GameManager.Instance.RhythmController;
+        _rhythmController.OnBeat += OnBeat;
+    }
+
+    private void OnBeat()
+    {
+        _currentAction = ActionType.Idle;
     }
 
     public void DoAction()
@@ -58,8 +70,6 @@ public class ActionController : MonoBehaviour
             default:
                 throw new ArgumentOutOfRangeException();
         }
-
-        _currentAction = ActionType.Idle;
     }
 
     private void SetAction(ActionType action)
@@ -162,5 +172,13 @@ public class ActionController : MonoBehaviour
 
         transform.DOMove(ActualPosition, MovementDuration).SetEase(Ease.Linear);
         _animator.SetTrigger("Move");
+    }
+
+    private void OnDestroy()
+    {
+        if (_rhythmController != null)
+        {
+            _rhythmController.OnBeat -= OnBeat;
+        }
     }
 }
