@@ -12,7 +12,10 @@ public enum ActionType
 
 public class ActionController : MonoBehaviour
 {
+    [SerializeField] private Color _damageColor = Color.red;
+    
     private const float MovementDuration = 0.25f;
+    private const float HurtDuration = 0.25f;
     
     private Health _health;
     private IMovement _movement;
@@ -22,9 +25,12 @@ public class ActionController : MonoBehaviour
     private ActionType _currentAction;
     private ActionController _attackTarget;
     private RhythmController _rhythmController;
+    private Color _originalColor;
     
     protected Direction CurrentDirection { get; private set; }
     public Vector3 ActualPosition { get; private set; }
+    
+    public bool ReflectAttack { get; set; }
     
     protected virtual void Awake()
     {
@@ -32,6 +38,7 @@ public class ActionController : MonoBehaviour
         _movement = GetComponent<IMovement>();
         _animator = GetComponentInChildren<Animator>();
         _spriteRenderer = GetComponentInChildren<SpriteRenderer>();
+        _originalColor = _spriteRenderer.color;
         
         ActualPosition = transform.position;
     }
@@ -149,19 +156,37 @@ public class ActionController : MonoBehaviour
 
     private void Attack()
     {
-        _attackTarget._health.TakeDamage();
-
-        var isTargetDead = _attackTarget._health.CurrentHealth == 0;
-        _attackTarget._animator.SetTrigger(isTargetDead ? "Dead" : "Hurt");
-        _attackTarget.SetAction(ActionType.Attacked);
-
-        if (isTargetDead)
+        if (!ReflectAttack)
         {
-            _attackTarget.enabled = false;
-            _attackTarget.gameObject.layer = LayerMask.NameToLayer("Wall");
+            ReceiveDamage(_attackTarget);
+        }
+        else
+        {
+            ReceiveDamage(this);
+            return;
         }
         
         _animator.SetTrigger("Attack");
+    }
+
+    private void ReceiveDamage(ActionController target)
+    {
+        target._health.TakeDamage();
+
+        var isTargetDead = target._health.CurrentHealth == 0;
+        target._animator.SetTrigger(isTargetDead ? "Dead" : "Hurt");
+        target.SetAction(ActionType.Attacked);
+        
+        target._spriteRenderer.color = _damageColor;
+        target._spriteRenderer.DOColor(_originalColor, HurtDuration);
+
+        if (!isTargetDead)
+        {
+            return;
+        }
+        
+        target.enabled = false;
+        target.gameObject.layer = LayerMask.NameToLayer("Wall");
     }
 
     private void Move()
