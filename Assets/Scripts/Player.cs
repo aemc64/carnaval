@@ -60,11 +60,6 @@ public class Player : MonoBehaviour, IMovement
         }
         
         _rhythmController.UpdateLastInputTime();
-            
-        if (IsWall(_direction))
-        {
-            _direction = Direction.None;
-        }
     }
     
     // Usa un Raycast para detectar muros antes de moverse
@@ -77,6 +72,11 @@ public class Player : MonoBehaviour, IMovement
     
     public Direction GetDirection()
     {
+        if (_direction != Direction.None && IsWall(_direction))
+        {
+            _direction = Direction.None;
+        }
+        
         return _direction;
     }
 
