@@ -37,8 +37,10 @@ public class GameManager : MonoBehaviour
         MaxEnemies = _enemyControllers.Count;
     }
 
-    private void OnBeatResult(bool onBeat)
+    private void OnBeatResult(BeatResultType beatResultType)
     {
+        var onBeat = beatResultType == BeatResultType.Success;
+        
         _player.UpdateIntendedAction(onBeat);
         _player.DoAction();
 

@@ -15,10 +15,15 @@ public class BeatBarUI : MonoBehaviour
         _rhythmController.OnBeatResult += OnBeatResult;
     }
     
-    private void OnBeatResult(bool success)
+    private void OnBeatResult(BeatResultType beatResultType)
     {
+        if (beatResultType == BeatResultType.None)
+        {
+            return;
+        }
+        
         var textInstance = Instantiate(_resultPrefab, transform);
-        textInstance.text = success ? "Good!" : "Miss";
+        textInstance.text = beatResultType == BeatResultType.Success ? "Good!" : "Miss";
         var rectTransform = (RectTransform)textInstance.transform;
         rectTransform
             .DOAnchorPos(rectTransform.anchoredPosition + _offset, GameManager.Instance.RhythmController.BeatTime)

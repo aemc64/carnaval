@@ -2,6 +2,13 @@ using System;
 using System.Collections;
 using UnityEngine;
 
+public enum BeatResultType
+{
+    None,
+    Success,
+    Failure
+}
+
 public class RhythmController : MonoBehaviour
 {
     [SerializeField] private float _beatTime;
@@ -11,11 +18,12 @@ public class RhythmController : MonoBehaviour
 
     public event Action OnActivate;
     public event Action OnBeat;
-    public event Action<bool> OnBeatResult;
+    public event Action<BeatResultType> OnBeatResult;
 
     private float _timer;
     private bool _isActive;
     private float _lastInputTime;
+    private bool _waitingForInput = true;
 
     private IEnumerator Start()
     {
@@ -36,9 +44,17 @@ public class RhythmController : MonoBehaviour
             return;
         }
         
-        var timeDiff = Time.time - _lastInputTime;
-        var success = timeDiff <= _tolerance;
-        OnBeatResult?.Invoke(success);
+        
+        var beatResultType = BeatResultType.None;
+        
+        if (!_waitingForInput)
+        {
+            var timeDiff = Time.time - _lastInputTime;
+            var success = timeDiff <= _tolerance;
+            beatResultType = success ? BeatResultType.Success : BeatResultType.Failure;
+        }
+        
+        OnBeatResult?.Invoke(beatResultType);
         
         OnBeat?.Invoke();
         ResetBeat();
@@ -47,6 +63,7 @@ public class RhythmController : MonoBehaviour
     private void ResetBeat()
     {
         _timer = _beatTime;
+        _waitingForInput = true;
     }
 
     private void Activate()
@@ -59,6 +76,7 @@ public class RhythmController : MonoBehaviour
     public void UpdateLastInputTime()
     {
         _lastInputTime = Time.time;
+        _waitingForInput = false;
     }
 
     public void Deactivate()
