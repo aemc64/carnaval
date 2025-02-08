@@ -44,7 +44,6 @@ public class RhythmController : MonoBehaviour
             return;
         }
         
-        
         var beatResultType = BeatResultType.None;
         
         if (!_waitingForInput)

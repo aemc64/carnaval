@@ -10,6 +10,8 @@ public class GameManager : MonoBehaviour
     [SerializeField] private ActionController _player;
     [SerializeField] private Transform _enemiesParent;
 
+    private int _missesCount;
+
     private List<ActionController> _enemyControllers;
     
     public RhythmController RhythmController => _rhythmController;
@@ -40,6 +42,11 @@ public class GameManager : MonoBehaviour
     private void OnBeatResult(BeatResultType beatResultType)
     {
         var onBeat = beatResultType == BeatResultType.Success;
+
+        if (beatResultType == BeatResultType.Failure)
+        {
+            _missesCount++;
+        }
         
         _player.UpdateIntendedAction(onBeat);
         _player.DoAction();
