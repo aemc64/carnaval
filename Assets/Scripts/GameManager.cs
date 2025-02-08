@@ -38,17 +38,12 @@ public class GameManager : MonoBehaviour
     private void OnBeatResult(bool onBeat)
     {
         _player.UpdateIntendedAction(onBeat);
+        _player.DoAction();
 
         foreach (var enemy in _enemyControllers)
         {
             enemy.UpdateIntendedAction(onBeat);
-        }
-        
-        _player.DoAction(onBeat);
-        
-        foreach (var enemy in _enemyControllers)
-        {
-            enemy.DoAction(onBeat);
+            enemy.DoAction();
         }
 
         for (var i = _enemyControllers.Count - 1; i >= 0; i--)

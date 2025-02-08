@@ -35,7 +35,7 @@ public class ActionController : MonoBehaviour
         ActualPosition = transform.position;
     }
 
-    public void DoAction(bool onBeat)
+    public void DoAction()
     {
         switch (_currentAction)
         {
@@ -58,6 +58,8 @@ public class ActionController : MonoBehaviour
             default:
                 throw new ArgumentOutOfRangeException();
         }
+
+        _currentAction = ActionType.Idle;
     }
 
     private void SetAction(ActionType action)
@@ -67,6 +69,11 @@ public class ActionController : MonoBehaviour
     
     public void UpdateIntendedAction(bool onBeat)
     {
+        if (_currentAction == ActionType.Attacked)
+        {
+            return;
+        }
+        
         UpdateCurrentDirection();
 
         if (CanMove(onBeat))
