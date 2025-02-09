@@ -1,15 +1,25 @@
 using System;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class Player : MonoBehaviour, IMovement
 {
     private ActionController _actionController;
+    private InputAction _leftAction;
+    private InputAction _rightAction;
+    private InputAction _downAction;
+    private InputAction _upAction;
     
     private LayerMask _wallLayer; // Capa para detectar los muros
 
     private void Awake()
     {
         _actionController = GetComponent<ActionController>();
+        
+        _leftAction = InputSystem.actions.FindAction("Left");
+        _rightAction = InputSystem.actions.FindAction("Right");
+        _downAction = InputSystem.actions.FindAction("Down");
+        _upAction = InputSystem.actions.FindAction("Up");
         
         _wallLayer = 1 << LayerMask.NameToLayer("Wall");
     }
@@ -33,22 +43,22 @@ public class Player : MonoBehaviour, IMovement
         var updateInputTime = false;
         
         // Detectar teclas de movimiento
-        if (Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.UpArrow)) // Tecla W o Flecha arriba
+        if (_upAction.WasPressedThisFrame()) // Tecla W o Flecha arriba
         {
             _direction = Direction.Up;
             updateInputTime = true;
         }
-        else if (Input.GetKeyDown(KeyCode.S) || Input.GetKeyDown(KeyCode.DownArrow)) // Tecla S o Flecha abajo
+        else if (_downAction.WasPressedThisFrame()) // Tecla S o Flecha abajo
         {
             _direction = Direction.Down;
             updateInputTime = true;
         }
-        else if (Input.GetKeyDown(KeyCode.A) || Input.GetKeyDown(KeyCode.LeftArrow)) // Tecla A o Flecha izquierda
+        else if (_leftAction.WasPressedThisFrame()) // Tecla A o Flecha izquierda
         {
             _direction = Direction.Left;
             updateInputTime = true;
         }
-        else if (Input.GetKeyDown(KeyCode.D) || Input.GetKeyDown(KeyCode.RightArrow)) // Tecla D o Flecha derecha
+        else if (_rightAction.WasPressedThisFrame()) // Tecla D o Flecha derecha
         {
             _direction = Direction.Right;
             updateInputTime = true;
