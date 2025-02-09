@@ -7,13 +7,13 @@ public class Health : MonoBehaviour
     
     public int CurrentHealth => _health;
 
-    public event Action OnHealthChanged;
+    public event Action OnDamageTaken;
     public event Action OnDeath;
 
     public void TakeDamage()
     {
         _health = Mathf.Max(_health - 1, 0);
-        OnHealthChanged?.Invoke();
+        OnDamageTaken?.Invoke();
 
         if (_health == 0)
         {

@@ -7,11 +7,11 @@ public class HealthUI : MonoBehaviour
 
     private void Awake()
     {
-        _health.OnHealthChanged += OnHealthChanged;
+        _health.OnDamageTaken += OnDamageTaken;
         UpdateHealth();
     }
 
-    private void OnHealthChanged()
+    private void OnDamageTaken()
     {
         UpdateHealth();
     }
@@ -30,7 +30,7 @@ public class HealthUI : MonoBehaviour
     {
         if (_health != null)
         {
-            _health.OnHealthChanged -= OnHealthChanged;
+            _health.OnDamageTaken -= OnDamageTaken;
         }
     }
 }
