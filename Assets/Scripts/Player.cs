@@ -11,6 +11,8 @@ public class Player : MonoBehaviour, IMovement
     private InputAction _upAction;
     
     private LayerMask _wallLayer; // Capa para detectar los muros
+    
+    public bool PressedAnyKey { get; private set; }
 
     private void Awake()
     {
@@ -68,7 +70,8 @@ public class Player : MonoBehaviour, IMovement
         {
             return;
         }
-        
+
+        PressedAnyKey = true;
         _rhythmController.UpdateLastInputTime();
     }
     

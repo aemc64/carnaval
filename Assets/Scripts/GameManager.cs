@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using DG.Tweening;
 using TMPro;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class GameManager : MonoBehaviour
 {
@@ -12,12 +13,14 @@ public class GameManager : MonoBehaviour
     [SerializeField] private RhythmController _rhythmController;
     [SerializeField] private ActionController _player;
     [SerializeField] private Transform _enemiesParent;
+    [SerializeField] private GameObject _instructions;
 
     [SerializeField] private TextMeshProUGUI _screenCenterText;
     [SerializeField] private AudioClip _whistleSound;
     [SerializeField] private AudioSource _audioSource;
 
     private int _missesCount;
+    private Player _playerObject;
 
     private List<ActionController> _enemyControllers;
     
@@ -44,9 +47,25 @@ public class GameManager : MonoBehaviour
         
         _enemyControllers = new List<ActionController>(_enemiesParent.GetComponentsInChildren<ActionController>());
         MaxEnemies = _enemyControllers.Count;
+
+        _playerObject = _player.GetComponent<Player>();
     }
 
-    private void Start()
+    private void Update()
+    {
+        if (!_instructions.activeSelf)
+        {
+            return;
+        }
+        
+        if (_playerObject.PressedAnyKey)
+        {
+            _instructions.SetActive(false);
+            StartCountdown();
+        }
+    }
+
+    private void StartCountdown()
     {
         var sequence = DOTween.Sequence();
         
