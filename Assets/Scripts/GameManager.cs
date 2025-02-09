@@ -14,6 +14,8 @@ public class GameManager : MonoBehaviour
     [SerializeField] private Transform _enemiesParent;
 
     [SerializeField] private TextMeshProUGUI _screenCenterText;
+    [SerializeField] private AudioClip _whistleSound;
+    [SerializeField] private AudioSource _audioSource;
 
     private int _missesCount;
 
@@ -120,13 +122,17 @@ public class GameManager : MonoBehaviour
         _screenCenterText.gameObject.SetActive(true);
         
         Core.Instance.PlayerWonLastGame = playerWon;
+        
+        _audioSource.Stop();
+        _audioSource.clip = _whistleSound;
+        _audioSource.Play();
 
         StartCoroutine(DelayAndLoadGameFinishedScene());
     }
 
     private static IEnumerator DelayAndLoadGameFinishedScene()
     {
-        yield return new WaitForSeconds(1f);
+        yield return new WaitForSeconds(2f);
         Core.Instance.LoadScene("GameFinished");
     }
 
