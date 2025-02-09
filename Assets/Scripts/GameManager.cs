@@ -116,8 +116,15 @@ public class GameManager : MonoBehaviour
 
     private void GameOver(bool playerWon)
     {
-        _rhythmController.Deactivate();
+        StartCoroutine(EndGameRoutine(playerWon));
+    }
 
+    private IEnumerator EndGameRoutine(bool playerWon)
+    {
+        _rhythmController.Deactivate();
+        
+        yield return new WaitForSeconds(3f);
+        
         _screenCenterText.text = "FINISH!";
         _screenCenterText.gameObject.SetActive(true);
         
@@ -126,13 +133,8 @@ public class GameManager : MonoBehaviour
         _audioSource.Stop();
         _audioSource.clip = _whistleSound;
         _audioSource.Play();
-
-        StartCoroutine(DelayAndLoadGameFinishedScene());
-    }
-
-    private static IEnumerator DelayAndLoadGameFinishedScene()
-    {
-        yield return new WaitForSeconds(2f);
+        
+        yield return new WaitForSeconds(3f);
         Core.Instance.LoadScene("GameFinished");
     }
 
