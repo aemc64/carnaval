@@ -73,6 +73,11 @@ public class RhythmController : MonoBehaviour
 
     public void UpdateLastInputTime()
     {
+        if (!_waitingForInput)
+        {
+            return;
+        }
+        
         _lastInputTime = Time.time;
         _waitingForInput = false;
     }
