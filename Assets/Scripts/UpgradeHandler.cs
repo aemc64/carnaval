@@ -5,6 +5,7 @@ public class UpgradeHandler : MonoBehaviour
 {
     [SerializeField] private int _requiredAmount = 1;
     [SerializeField] private List<RuntimeAnimatorController> _animatorControllers;
+    [SerializeField] private ParticleSystem _particles;
     
     private GameManager _gameManager;
     private Animator _animator;
@@ -24,7 +25,15 @@ public class UpgradeHandler : MonoBehaviour
     {
         var defeatedEnemies = _gameManager.DefeatedEnemies;
         var currentAnimatorIndex = defeatedEnemies / _requiredAmount;
-        _animator.runtimeAnimatorController = _animatorControllers[currentAnimatorIndex];
+
+        var currentAnimatorController = _animator.runtimeAnimatorController;
+        var newAnimatorController = _animatorControllers[currentAnimatorIndex];
+        _animator.runtimeAnimatorController = newAnimatorController;
+        
+        if (newAnimatorController != currentAnimatorController)
+        {
+            _particles.Play();
+        }
     }
 
     private void OnDestroy()
