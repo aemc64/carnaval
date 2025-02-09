@@ -8,8 +8,8 @@ public class Core : MonoBehaviour
     [SerializeField] private LoadingScreen _loadingScreen;
 
     private string _currentLoadingScene;
-    
-    public bool PlayerWonLastGame { get; set; }
+
+    public bool PlayerWonLastGame { get; set; } = true;
     
     private void Awake()
     {
