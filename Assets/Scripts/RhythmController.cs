@@ -1,5 +1,4 @@
 using System;
-using System.Collections;
 using UnityEngine;
 
 public enum BeatResultType
@@ -26,12 +25,6 @@ public class RhythmController : MonoBehaviour
     private bool _isActive;
     private float _lastInputTime;
     private bool _waitingForInput = true;
-
-    private IEnumerator Start()
-    {
-        yield return new WaitForSeconds(1f);
-        Activate();
-    }
 
     public void Update()
     {
@@ -67,7 +60,7 @@ public class RhythmController : MonoBehaviour
         _waitingForInput = true;
     }
 
-    private void Activate()
+    public void Activate()
     {
         _beatBar.SetActive(true);
         _audioSource.Play();

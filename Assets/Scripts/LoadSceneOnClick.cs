@@ -13,7 +13,7 @@ public class LoadSceneOnClick : MonoBehaviour
         
         _button.onClick.AddListener(() =>
         {
-            SceneChanger.Instance.LoadScene(_sceneName);
+            Core.Instance.LoadScene(_sceneName);
             _button.onClick.RemoveAllListeners();
         });
     }
